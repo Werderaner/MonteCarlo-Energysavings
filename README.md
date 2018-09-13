@@ -1,6 +1,15 @@
 # MonteCarlo-Energysavings
 
-TODO: texts to merge for algorithm descrition:
+TODO (EP): texts to merge for algorithm descrition:
+
+Text 1
+------
+
+https://github.com/epogrebnyak/MonteCarlo-Energysavings/blob/a7f8e6508225715e05f25d150941e27e7abd072a/monte_carlo.py#L44-L97
+
+
+Text 2
+------
 
 I have two cycles: One Subsurface cycle, where groundwater is pumped to the surface and a building cycle, where heat and cold are circulated in the building. Both cycles are connected by a heat exchanger.
 
