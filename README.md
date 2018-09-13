@@ -1,4 +1,4 @@
-Geothermal houshold system simulation 
+Geothermal household system simulation 
 =====================================
 
 
