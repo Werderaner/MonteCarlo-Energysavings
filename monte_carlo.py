@@ -1,7 +1,8 @@
-"""Simulate performance of combined heat and power generation plants. 
+"""Simulate performance of geothermal heating/cooling system.
 
 Original code: 
     https://stackoverflow.com/questions/52258435/monte-carlo-simulation-with-triangular-and-normal-probability-density-distibutio/52260330?noredirect=1#comment91526700_52260330
+
 """
 
 import matplotlib.pyplot as plt
@@ -9,14 +10,6 @@ import numpy as np
 from numpy.random import triangular
 
 
-# EP: I know I suggested the approach, but at scale lots of microfunctions 
-#     seem messy.
-
-# EP: We need to restore the logic of the script and move to more attractive code
-
-
-# EP: where is the gaussiean pdf that yoyu want to replace?
-Line 162-176
 
 # EP - this seems to your equations, correct?
 
@@ -51,21 +44,47 @@ def total_costs(costs_heatpump, costs_coldpump, costs_warmpump):
 # TODO: Need you problem formulation here: what is being calculated?
 #       What are the steps of calculation?
 
-# I have a building which is supplied by a geothermal system with heat (wintertime) and cold (summertime).
-# While a heat pump is required for heating of the building, the groundwater can be used directly for summertime cooling.
-# In order to calculate the total electricity demand of the heating and cooling system, I need to know the electricity
-# consumption of the groundwater pumps during winter- and summertime and also of the heat pump.
+# I have a building which is supplied by a geothermal system with heat 
+# (wintertime) and cold (summertime).
+# While a heat pump is required for heating of the building, the groundwater can 
+# be used directly for summertime cooling.
+# In order to calculate the total electricity demand of the heating and 
+# cooling system, I need to know the electricity consumption of the groundwater 
+# pumps during winter- and summertime and also of the heat pump.
 
-# To calculate the electricity demand of the heat pump I need to know the energy output. This can be calculated by
-# energy_input * COP / (COP-1). The energy output divided by the COP gives me the electricity demand. The electricity
-#costs times the specific electricity price gives me the total electricity costs for the heat pump.
+# -----------------------------------------------------------------------------
+# EP - QUESTION: it this correct? 
+# https://www.epa.gov/rhc/geothermal-heating-and-cooling-technologies#Ground-Source-Heat-Pumps
+#
+# - The 'ground source heat pump', 'hear pump' works winter and summer
+# - The other 'groundwater punp' works only in summer for cooling?
 
-# In a second step I need to calculate the elec. costs for the groundwater pump during wintertime. This can be calculated
-# by the amount of pumped energy (INPUT_ENERGY_HEATING = 866) divided by the COP of the pump. Then again calculation of amount
-# of elec. and electricity costs. 
+  
+# There are two electricity-consuming devices and two seasons:
+#                        Winter             Summer
+#                        -------------      ---------
+#   Heat pump            Heating            Cooling
+#   Growndwater pump     Does not work?     Cooling
+#    
 
-# The third step is equivalent to the second step, with the difference that you use here "INPUT_ENERGY_COOLING = 912" as input.
+# Later in your description one cannot say for shure above is correct.
+# Please clarify to fix this.
+# -----------------------------------------------------------------------------
 
+
+# To calculate the electricity demand of the heat pump I need to know the energy 
+# output. This can be calculated by energy_input * COP / (COP-1). The energy output 
+# divided by the COP gives me the electricity demand. The electricity costs times 
+# the specific electricity price gives me the total electricity costs for the heat pump.
+#
+# In a second step I need to calculate the elec. costs for the groundwater pump 
+# during wintertime. This can be calculated by the amount of pumped energy 
+# (INPUT_ENERGY_HEATING = 866) divided by the COP of the pump. Then again 
+# calculation of amount of elec. and electricity costs. 
+#
+# The third step is equivalent to the second step, with the difference that you 
+# use here "INPUT_ENERGY_COOLING = 912" as input.
+#
 # In a fourth step you sum up all electricity costs of each component. This is the point where I have to create the Gaussian PDFs
 # and where I am struggling. I think it is also the reason why the code is so super slow.
 
@@ -161,7 +180,8 @@ ELEC_COSTS_HEATPUMP_PARAM = dict(loc=mean_hp, scale=std_hp)
 def seed_costs_hp():
     return np.random.normal(**ELEC_COSTS_HEATPUMP_PARAM)
 
-
+# EP: where is the gaussiean pdf that yoyu want to replace?
+# FIXME: why does numpy does not fit?
 ELEC_COSTS_COLDPUMP_PARAM = dict(loc=mean_cp, scale=sdt_cp)
 
 
