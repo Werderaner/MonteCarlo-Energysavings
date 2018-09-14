@@ -36,7 +36,7 @@ PRICE_DISTRIBUTION_PARAM = dict(left=140, mode=150, right=160)
 def seed_cop_hp():
     return triangular(**COP_DISTRIBUTION_PARAM)
 
-def seed_price():
+def seed_price(): #(€/MWh)
     return triangular(**PRICE_DISTRIBUTION_PARAM) 
 
 def seed_cop_gw_pump():
@@ -52,12 +52,10 @@ def gw_cost():
     """Groundwater cycle cost, euro"""
     return gw_consumption() * seed_price()
 
-# Calculations of the elec. costs of the heat pump
-def hp_output():
-    return (ENERGY_HEATING_MWH * seed_cop_hp()) / (seed_cop_hp() - 1)
-
+"""Calculations of the elec. costs of the heat pump. Input: ENERGY_HEATING_MWH = 866 (pumped energy from subsurface);
+Output: energy input divided by COP of the heat pump """
 def hp_consumption():
-    return hp_output() / seed_cop_hp()
+    return ENERGY_HEATING_MWH / (seed_cop_hp() - 1)
 
 def hp_cost():
     """heat pump cost, euro"""
