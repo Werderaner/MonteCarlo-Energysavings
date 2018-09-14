@@ -53,7 +53,7 @@ def hp_consumption():
        Input: ENERGY_HEATING_MWH = 866 (pumped energy from subsurface)
        Output: energy input divided by COP of the heat pump
     """
-    # FIXME: there should be -1?
+    # FIXME: there should be -1? True, sorry!
     return ENERGY_HEATING_MWH / (seed_cop_hp() - 1)
 
 def hp_cost():
@@ -87,7 +87,7 @@ def plot_from_func():
     total_costs_list = sim(total_costs)
     plot(total_costs_list, "Total costs")
 
-# Numpy form (very short)
+# Numpy form (very short) Oh wow this looks very short, incredible. I do not totally understand how this works, but I will figure it out.
 
 def seed_triangular(param):
     return triangular(**param, size=N)
@@ -102,6 +102,7 @@ total_costs_np = (ec_gw + ec_hp) * p
 
 # NEXT:
 #   - what are parameters of 70 systems?
+# The systems differ in terms of the ENERGY_HEATING_MWH & ENERGY_COOLING_MWH.
 
 if __name__ == "__main__":
     plot(total_costs_np, header=f"Total costs, {N/10**6} mln simulations")
