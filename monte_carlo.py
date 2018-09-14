@@ -24,21 +24,46 @@ N=100_000
 ENERGY_HEATING_MWH = 866
 ENERGY_COOLING_MWH = 912
 # FIXME: you have 40 in readme, not 4 
+# We need both. 40 is the COP of the groundwater pump, 4 of the heat pump.
 COP_DISTRIBUTION_PARAM = dict(left=4, mode=4.5, right=5)
 
-def seed_cop():
+# What is missnig is the COP of the groundwater pump
+COP_GW_PUMP_DISTRIBUTION_PARAM = dict(left=35, mode=40, right=45)
+
+# I changed this to a triangular distributon. 
+PRICE_DISTRIBUTION_PARAM = dict(left=140, mode=150, right=160)
+
+def seed_cop_hp():
     return triangular(**COP_DISTRIBUTION_PARAM)
 
-def seed_price():
-    return normal(0.15, 0.05) 
+def seed_price(): #(€/MWh)
+    return triangular(**PRICE_DISTRIBUTION_PARAM) 
+
+def seed_cop_gw_pump():
+    return triangular(**COP_GW_PUMP_DISTRIBUTION_PARAM) 
 
 # QUESTION: is this right for a groundwater cycle? choose one cop for both seasons?
+# Yes, beacause we are using the same pump to extract the groundwater during winter- & summertime
+
 def gw_consumption():
-    return (ENERGY_HEATING_MWH + ENERGY_COOLING_MWH) / seed_cop() 
+    return (ENERGY_HEATING_MWH + ENERGY_COOLING_MWH) / seed_cop_gw_pump() 
 
 def gw_cost():
     """Groundwater cycle cost, euro"""
     return gw_consumption() * seed_price()
+
+"""Calculations of the elec. costs of the heat pump. Input: ENERGY_HEATING_MWH = 866 (pumped energy from subsurface);
+Output: energy input divided by COP of the heat pump """
+def hp_consumption():
+    return ENERGY_HEATING_MWH / (seed_cop_hp() - 1)
+
+def hp_cost():
+    """heat pump cost, euro"""
+    return hp_consumption() * seed_price()
+
+# Summation of heat pump and groundwater pump costs
+def total_costs():
+    return hp_cost() + gw_cost()
 
 def sim(func, n=N):
     return [func() for _ in range(n)]
@@ -49,6 +74,7 @@ def plot(x, header=""):
     plt.figure()
 
 # NOTE: same can be down with fewer fucntions and numpy arrays
+# With the calculation of the heat pump costs, the code is getting quite long again. It would be good to shorten it by using numpy.
 
 
 if __name__ == "__main__":
@@ -61,7 +87,13 @@ if __name__ == "__main__":
     # kind of normal (triangular * normal)
     total_cost_simulated = sim(gw_cost)
     plot(total_cost_simulated)
-
+    # kind of normal (normal + normal)
+    heat_pump_costs = sim(hp_cost)
+    plot( heat_pump_costs)
+    # kind of normal (normal + normal)
+    total_costs = sim(total_costs)
+    plot(total_costs)
+    
 # Groundwater cycle
 
 # EP to be discussed - I do not underatand logic of energy in and energy out
