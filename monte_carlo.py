@@ -20,8 +20,8 @@ N=1_000_000
 
 # Seed effieciencies and prices
 
-DISTRIBUTION_PARAM_COP_GWP = dict(left=4, mode=4.5, right=5)
-DISTRIBUTION_PARAM_COP_HP = dict(left=35, mode=40, right=45)
+DISTRIBUTION_PARAM_COP_HP = dict(left=4, mode=4.5, right=5)
+DISTRIBUTION_PARAM_COP_GWP = dict(left=35, mode=40, right=45)
 DISTRIBUTION_PARAM_PRICE = dict(left=140, mode=150, right=160)
 
 def seed_cop_hp():
